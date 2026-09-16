@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zion LLM Benchmark Explainer</title>
+<meta name="description" content="What do MMLU, SWE-bench, GPQA, HumanEval and other LLM benchmarks actually measure? Interactive guide with caveats. Free tool by Zion Tech Group.">
+<style>
+:root{--bg:#0c0e14;--card:#141a29;--acc:#93c5fd;--txt:#eaf0fc;--mut:#98a6c6}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--txt)}
+header{padding:48px 24px 24px;text-align:center;background:linear-gradient(160deg,#16264d,#0c0e14)}
+h1{margin:0 0 8px}.wrap{max-width:900px;margin:0 auto;padding:24px}
+input[type=search]{width:100%;padding:14px 16px;border-radius:12px;border:1px solid #27385c;background:var(--card);color:var(--txt);font-size:1rem}
+.card{background:var(--card);border:1px solid #22355a;border-radius:14px;padding:18px;margin:12px 0}
+.card h3{margin:0 0 4px}.tag{font-size:.72rem;padding:2px 8px;border-radius:12px;background:#1c2c4d;color:var(--acc);margin-right:6px}
+.meta{color:var(--mut);font-size:.88rem;margin-top:8px}
+.warn{color:#fbbf24;font-size:.85rem;margin-top:8px}
+footer{padding:32px 24px;text-align:center;color:var(--mut);font-size:.85rem;border-top:1px solid #1c2a44;margin-top:40px}
+footer a{color:var(--acc);text-decoration:none;margin:0 8px}
+</style>
+</head>
+<body>
+<header><h1>📐 Zion LLM Benchmark Explainer</h1>
+<p>Benchmarks measure narrow things. Know what each one actually tests before trusting a leaderboard.</p></header>
+<div class="wrap"><input type="search" id="q" placeholder="Search benchmarks… (e.g. coding, math, agents)"><div id="list"></div></div>
+<footer>Part of the <a href="https://ziontechgroup.com">Zion Tech Group</a> AI apps network ·
+<a href="https://ziontechgroup.com/zion-ai-release-radar/">AI Release Radar</a>
+<a href="https://ziontechgroup.com/zion-eval-generator/">Eval Generator</a>
+<a href="https://ziontechgroup.com/llm-bench/">Zion LLM Bench</a></footer>
+<script>
+const B=[
+['MMLU','Knowledge','Multiple-choice across 57 academic subjects','Static, widely memorized; contamination likely','Saturated — top models >90%'],
+['MMLU-Pro','Knowledge','Harder MMLU variant, 10 options','Still static and clean','Better discriminator today'],
+['GPQA','Reasoning','PhD-level science questions, Google-proof','Small set (~450), high variance','Good for frontier reasoning'],
+['SWE-bench Verified','Coding/Agents','Resolve real GitHub issues end-to-end','Scaffold-dependent; repo-specific','Best public signal for agentic coding'],
+['HumanEval','Coding','164 short Python function completions','Saturated, contamination-prone','Historical reference only'],
+['LiveCodeBench','Coding','Contamination-resistant rotating problems','Competitive-programming flavored','Good freshness'],
+['ARC-AGI-2','Reasoning','Abstract visual pattern puzzles','Very hard; not representative of business tasks','Measures fluid intelligence-ish'],
+['Tau-bench / Tau2','Agents','Tool-use agent tasks in retail/airline domains','Narrow domains','Watch for agent reliability'],
+['MATH / GSM8K','Math','Grade-school to competition math','Saturated at frontier','Legacy signal'],
+['Chatbot Arena (Elo)','Preference','Human pairwise preference voting','Vibes-driven; style bias (length, formatting)','Directional, not precise'],
+['HELM','Holistic','Multi-scenario academic framework','Complex to run fully','Rigorous but slow-moving'],
+['IFEval','Instruction','Verifiable instruction-following checks','Narrow but objective','Underrated for production assistants']];
+const l=document.getElementById('list');
+function render(q=''){l.innerHTML=B.filter(b=>JSON.stringify(b).toLowerCase().includes(q)).map(b=>`<div class="card"><h3>${b[0]}</h3><span class="tag">${b[1]}</span><div class="meta"><b>Measures:</b> ${b[2]}</div><div class="meta"><b>Limits:</b> ${b[3]}</div><div class="warn">⚠ ${b[4]}</div></div>`).join('');}
+render();document.getElementById('q').addEventListener('input',e=>render(e.target.value.toLowerCase()));
+</script>
+</body>
+</html>
